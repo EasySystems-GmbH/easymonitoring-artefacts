@@ -1,0 +1,37 @@
+# Secrets — never commit
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+secrets/
+**/secrets/
+
+# Local signing / packaging keys
+*.sig
+signing/
+codesign/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Python / Node scratch (artefacts may ship .py install scripts)
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+node_modules/
+
+# Synology SPK build scratch (committed outputs: dist/*.spk, repo/, package/)
+community-package/.build/
+
+# Allowed and expected in this repo:
+# - apps/**/deploy/**/*.sh
+# - apps/**/community-package/dist/*.spk
+# - apps/**/community-package/repo/packages.json
+# - apps/windows-monitor/publish/**/*.exe
