@@ -1,0 +1,15 @@
+# Unix rollout agent (agent-only edition). Pull from GHCR or build locally.
+services:
+  rollout-agent:
+    image: ${ROLLOUT_AGENT_IMAGE:-ghcr.io/easystems-gmbh/unix-rollout-agent:latest}
+    ports:
+      - "8787:8787"
+    environment:
+      ESYS_ROLLOUT_AGENT: "1"
+      UNIX_MONITOR_DATA: /data
+    volumes:
+      - rollout-agent-data:/data
+    restart: unless-stopped
+
+volumes:
+  rollout-agent-data:

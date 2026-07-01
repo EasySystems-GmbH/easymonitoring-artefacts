@@ -1,0 +1,17 @@
+    <form method="post" action="/auth/setup">
+      <input type="hidden" name="username" value="admin" autocomplete="username">
+      <label>Create admin password</label>
+      <div class="input-with-action">
+        <input id="auth-setup-password" name="password" type="password" autocomplete="new-password" minlength="10" required autofocus>
+        <button type="button" class="btn-icon toggle-password-btn" data-target="auth-setup-password" aria-label="Show password">Show</button>
+      </div>
+      <label>Confirm password</label>
+      <div class="input-with-action">
+        <input id="auth-setup-password2" name="password_confirm" type="password" autocomplete="new-password" minlength="10" required>
+        <button type="button" class="btn-icon toggle-password-btn" data-target="auth-setup-password2" aria-label="Show password">Show</button>
+      </div>
+      <div class="button-row">
+        <button type="submit">Initialize Security</button>
+      </div>
+      <div class="muted">Use a strong password (minimum 10 characters). You will scan a QR code and confirm a code before the account is saved.</div>
+    </form>

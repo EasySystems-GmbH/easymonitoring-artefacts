@@ -1,0 +1,14 @@
+name: artefacts-hygiene
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Runtime state and secrets scan
+        run: bash scripts/artefacts-hygiene.sh

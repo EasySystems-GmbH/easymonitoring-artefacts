@@ -1,0 +1,35 @@
+[
+  {
+    "step_title": "Hosted master peering",
+    "items": [
+      {
+        "type": "text",
+        "desc": "Master URL (e.g. http://master-host:8080). Leave empty to configure later in the package UI.",
+        "subitems": [
+          {
+            "key": "wizard_master_url",
+            "desc": "Master URL",
+            "defaultValue": "",
+            "validator": {
+              "allowBlank": true
+            }
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "desc": "Peering token from hosted master Settings.",
+        "subitems": [
+          {
+            "key": "wizard_peering_token",
+            "desc": "Peering token",
+            "defaultValue": "",
+            "validator": {
+              "allowBlank": true
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

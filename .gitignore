@@ -9,6 +9,17 @@ credentials.json
 secrets/
 **/secrets/
 
+# Runtime monitor state (local only — never publish)
+*auth*.json
+synology-auth.json
+unix-auth.json
+synology-monitor.json
+unix-monitor.json
+windows-monitor.json
+.sync-hint
+state/
+.state/
+
 # Local signing / packaging keys
 *.sig
 signing/
@@ -29,6 +40,7 @@ node_modules/
 
 # Synology SPK build scratch (committed outputs: dist/*.spk, repo/, package/)
 community-package/.build/
+**/.build/
 
 # Allowed and expected in this repo:
 # - apps/**/deploy/**/*.sh

@@ -1,0 +1,100 @@
+    <form method="post" action="/auth/login">
+      <input type="hidden" name="username" value="admin" autocomplete="username">
+      <label>Admin password</label>
+      <div class="input-with-action">
+        <input id="auth-password" name="password" type="password" autocomplete="current-password" required autofocus>
+        <button type="button" class="btn-icon toggle-password-btn" data-target="auth-password" aria-label="Show password">Show</button>
+      </div>
+      <div class="button-row">
+        <button type="submit">Continue</button>
+      </div>
+      <div class="muted" style="margin-top:8px;">Recommendation: publish this UI behind a reverse proxy with HTTPS.</div>
+      <div id="auth-internet-msg" class="err hidden" style="margin-top:10px;padding:8px 10px;border-radius:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <strong id="auth-internet-status-text">No Internet Connectivity</strong>
+          <button type="button" id="auth-internet-info-toggle" style="width:22px;height:22px;border-radius:999px;padding:0;font-size:12px;line-height:20px;text-align:center;" aria-label="Why this status matters">i</button>
+        </div>
+        <div id="auth-internet-info" style="display:none;margin-top:6px;font-size:12px;line-height:1.4;"></div>
+        <label id="auth-internet-ignore-wrap" style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:#cddbf0;">
+          <input id="auth-internet-ignore" type="checkbox" style="width:auto;margin:0;">
+          Ignore this warning on this browser
+        </label>
+      </div>
+    </form>
+    <script>
+      (function () {
+        var msg = document.getElementById("auth-internet-msg");
+        var statusText = document.getElementById("auth-internet-status-text");
+        var info = document.getElementById("auth-internet-info");
+        var infoToggle = document.getElementById("auth-internet-info-toggle");
+        var ignoreWrap = document.getElementById("auth-internet-ignore-wrap");
+        var ignore = document.getElementById("auth-internet-ignore");
+        var ignoreStorageKey = "unix-monitor-auth-ignore-internet-warning";
+        if (!msg || !statusText || !info) return;
+        function getIgnored() {
+          try { return window.localStorage && localStorage.getItem(ignoreStorageKey) === "1"; }
+          catch (e) { return false; }
+        }
+        function setIgnored(val) {
+          try {
+            if (!window.localStorage) return;
+            if (val) localStorage.setItem(ignoreStorageKey, "1");
+            else localStorage.removeItem(ignoreStorageKey);
+          } catch (e) {}
+        }
+        function showWarning(title, text, level) {
+          var cls = (level === "muted") ? "muted" : (getIgnored() ? "muted" : "err");
+          msg.className = cls;
+          msg.classList.remove("hidden");
+          statusText.textContent = String(title || "No Internet Connectivity");
+          info.textContent = String(text || "Internet is required for push to Kuma, peering/sync, and update checks. Local checks can still run in standalone mode.");
+          if (ignoreWrap) { ignoreWrap.style.display = "flex"; }
+        }
+        function hideWarning() {
+          msg.classList.add("hidden");
+        }
+        if (infoToggle) {
+          infoToggle.addEventListener("click", function () {
+            info.style.display = info.style.display === "none" ? "block" : "none";
+          });
+        }
+        if (ignore) {
+          ignore.checked = getIgnored();
+          ignore.addEventListener("change", function () {
+            setIgnored(!!ignore.checked);
+            if (!msg.classList.contains("hidden")) {
+              msg.className = ignore.checked ? "muted" : "err";
+            }
+          });
+        }
+        async function refreshInternetStatus() {
+          try {
+            var r = await fetch("/api/public/internet", { cache: "no-store" });
+            var data = await r.json().catch(function () { return {}; });
+            if (!r.ok) throw new Error(data.detail || data.error || ("HTTP " + r.status));
+            var ok = !!data.reachable;
+            var required = !!data.internet_required;
+            var detail = String(data.detail || (ok ? "Internet reachable." : "Internet not reachable."));
+            if (ok || !required) {
+              hideWarning();
+            } else {
+              showWarning(
+                "No Internet Connectivity",
+                "Internet is required for push to Kuma, peering/sync, and update checks. Local checks can still run in standalone mode. " + detail,
+                "err"
+              );
+            }
+          } catch (e) {
+            showWarning(
+              "Connectivity check unavailable",
+              "Internet probe could not be completed right now. This is often temporary; the page will retry automatically.",
+              "muted"
+            );
+          }
+        }
+        refreshInternetStatus();
+        window.setInterval(refreshInternetStatus, 30000);
+        window.addEventListener("online", refreshInternetStatus);
+        window.addEventListener("offline", refreshInternetStatus);
+      })();
+    </script>

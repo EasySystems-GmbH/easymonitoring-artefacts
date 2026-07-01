@@ -1,0 +1,7 @@
+# Local build override — use with: docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+services:
+  rollout-agent:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    image: ghcr.io/easystems-gmbh/unix-rollout-agent:dev-local

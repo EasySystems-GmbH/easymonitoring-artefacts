@@ -1,0 +1,4 @@
+deploy/agent-installation/dist/
+deploy/agent-installation/.build-spk/
+synology-auth.json
+synology-monitor.json

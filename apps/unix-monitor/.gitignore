@@ -1,0 +1,3 @@
+deploy/agent-installation/dist/
+unix-auth.json
+unix-monitor.json

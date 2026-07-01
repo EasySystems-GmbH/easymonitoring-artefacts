@@ -1,0 +1,8 @@
+    <form method="post" action="/auth/recovery">
+      <label>One-time recovery code</label>
+      <input id="auth-recovery-code" name="recovery_code" placeholder="ABCD-1234" required autofocus>
+      <div class="button-row">
+        <button type="submit">Sign In with Recovery Code</button>
+        <a class="btn secondary" href="/auth/verify-2fa">Back to TOTP</a>
+      </div>
+    </form>

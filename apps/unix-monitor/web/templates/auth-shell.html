@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/png" href="__FAVICON_URL__">
+  <title>__PAGE_TITLE__</title>
+  <style>
+__AUTH_SHELL_STYLES__
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="auth-grid">
+__AUTH_HERO__
+      <div class="card">
+        <h3>__AUTH_TITLE__</h3>
+        __WARN_HTML__
+        __INFO_HTML__
+        __ERR_HTML__
+        __BODY_HTML__
+      </div>
+    </div>
+  </div>
+  <script>
+  (function () {
+    document.addEventListener("click", function (ev) {
+      var btn = ev && ev.target && ev.target.closest ? ev.target.closest(".toggle-password-btn[data-target]") : null;
+      if (!btn) return;
+      var targetId = btn.getAttribute("data-target") || "";
+      var input = targetId ? document.getElementById(targetId) : null;
+      if (!input) return;
+      var show = input.type === "password";
+      input.type = show ? "text" : "password";
+      btn.textContent = show ? "Hide" : "Show";
+      btn.setAttribute("aria-label", show ? "Hide password" : "Show password");
+    });
+
+    function focusAuthPrimary() {
+      var el = document.getElementById("auth-password")
+        || document.getElementById("auth-totp-token")
+        || document.getElementById("auth-recovery-code")
+        || document.getElementById("auth-setup-password");
+      if (!el || !el.focus) return;
+      try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", focusAuthPrimary);
+    else focusAuthPrimary();
+  })();
+  </script>
+</body>
+</html>

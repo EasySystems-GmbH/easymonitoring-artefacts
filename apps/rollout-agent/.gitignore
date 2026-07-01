@@ -1,0 +1,5 @@
+dist/
+.build-synology/
+docker/unix-monitor-agent.py
+docker/src/
+docker/web/

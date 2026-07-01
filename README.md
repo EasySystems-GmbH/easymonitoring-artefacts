@@ -85,8 +85,8 @@ Target directory: `$EASYMONITORING_ARTEFACTS_ROOT` (default: sibling `../easymon
 
 | Source (`easymonitoring/apps/…`) | Destination (`apps/…`) | Notes |
 |----------------------------------|------------------------|-------|
-| `unix-monitor/` | `unix-monitor/` | Entry script, `web/`, `deploy/`; excludes `.venv`, `__pycache__`, `state` |
-| `synology-monitor/` | `synology-monitor/` | Entry script, `web/`, `community-package/`; excludes `.build` scratch |
+| `unix-monitor/` | `unix-monitor/` | Entry script, `web/`, `deploy/`; excludes `.venv`, `__pycache__`, runtime `*auth*.json`, `*-monitor.json`, `state/` |
+| `synology-monitor/` | `synology-monitor/` | Entry script, `web/`, `community-package/`; excludes `.build` scratch and runtime state files |
 | `synology-monitor/community-package/dist/*.spk` | same | Copied when SPK build output exists |
 | `rollout-agent/` | `rollout-agent/` | Dist/install scripts; excludes local `dist` scratch |
 | `windows-monitor/publish/` | `windows-monitor/publish/` | Optional EXE/installer outputs after `publish-full-installer.ps1` |
@@ -94,8 +94,17 @@ Target directory: `$EASYMONITORING_ARTEFACTS_ROOT` (default: sibling `../easymon
 Hygiene gate before publish:
 
 ```bash
-./playbook artefacts-check   # fails if `.env`, `*.pem`, `*.key` found in artefacts tree
+./playbook artefacts-publish-check    # auto sync-artefacts (if needed) + conflict-check + artefacts-check + Windows publish status
+./playbook artefacts-check            # standalone secrets/runtime-state scan (no sync)
 ```
+
+In this repo (standalone or CI):
+
+```bash
+./scripts/artefacts-hygiene.sh        # mirrors artefacts-check; uses ../easymonitoring/playbook when present
+```
+
+**Never commit runtime state:** `*auth*.json`, local `*-monitor.json`, `state/`, `.env`, keys/certs. `sync-artefacts` excludes these patterns.
 
 ## Releases
 

@@ -1,0 +1,8 @@
+    <form method="post" action="/auth/verify-2fa">
+      <label>6-digit authenticator code</label>
+      <input id="auth-totp-token" name="token" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" required autofocus>
+      <div class="button-row">
+        <button type="submit">Verify and Sign In</button>
+        <a class="btn secondary" href="/auth/recovery">Use recovery code</a>
+      </div>
+    </form>

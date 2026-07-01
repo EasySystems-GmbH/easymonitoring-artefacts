@@ -15,7 +15,7 @@ Agent **installers and artifacts** live under each monitor app:
 This folder provides:
 
 - `scripts/patch-source.py` — bake `ROLLOUT_AGENT_BUILD=True` into agent artifacts; copies `src/` + `web/` beside each patched `*.py`
-- `docker/` — Unix agent container (GHCR `unix-rollout-agent`)
+- `docker/` — Unix agent container (GHCR `unix-rollout-agent`); `stage-build-context.sh` stages `dist/{unix-monitor-agent.py,src/,web/}` into the build context before `docker build`
 - `build-all.sh` — local maintainer build (all platforms)
 
 **Playbook:** `./playbook build-rollout` patches sources, builds SPK + Windows agent EXE, syncs **easymonitoring-artefacts**.
